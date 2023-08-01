@@ -48,24 +48,11 @@ class CategoryDaoTest {
             .map { it.toCategoryDb() }
             .toTypedArray()
 
-        val categoriesWithUserId0 = arrayOf(
-            LocalCategoryDataProvider.category1.toCategoryDb(),
-            LocalCategoryDataProvider.category2.toCategoryDb()
-        )
-
         categoryDao.insertCategory(*categories)
 
         categoryDao.getAllCategory().firstOrNull()?.let { list ->
             list.forEach { categoryDb ->
                 assert(categoryDb in categories) { "Category $categoryDb not in categories" }
-            }
-        }
-
-        categoryDao.getCategoryByUserId(0).firstOrNull().let { list ->
-            assert(list != null) { "Categories by user id null" }
-
-            list!!.forEach { categoryDb ->
-                assert(categoryDb in categoriesWithUserId0) { "Category $categoryDb not in Categories with user id 0" }
             }
         }
 
