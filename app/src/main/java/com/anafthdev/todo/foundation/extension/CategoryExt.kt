@@ -6,7 +6,6 @@ import com.anafthdev.todo.data.model.db.CategoryDb
 fun Category.toCategoryDb(): CategoryDb {
     return CategoryDb(
         id = id,
-        userId = userId,
         name = name,
     )
 }

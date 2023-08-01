@@ -6,7 +6,6 @@ import com.anafthdev.todo.data.model.db.relation.CategoryDbWithTodoDb
 fun CategoryDbWithTodoDb.toCategory(): Category {
     return Category(
         id = categoryDb.id,
-        userId = categoryDb.userId,
         name = categoryDb.name,
         todo = todoList.map { it.toTodo() }
     )
