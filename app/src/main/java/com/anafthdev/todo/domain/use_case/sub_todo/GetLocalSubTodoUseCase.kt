@@ -16,7 +16,7 @@ class GetLocalSubTodoUseCase(
 ) {
 
     /**
-     * @param getSubTodoBy method to get categories
+     * @param getSubTodoBy method to get sub to-do
      * @return list of sub to-do, if [getSubTodoBy] is [GetSubTodoBy.ID], returned single item `subTodoList[0]`
      */
     operator fun invoke(
