@@ -2,6 +2,9 @@ package com.anafthdev.todo.data.datasource.local
 
 import com.anafthdev.todo.data.model.Category
 
+/**
+ * Raw data provider for [Category]
+ */
 object LocalCategoryDataProvider {
 
     val category1 = Category(

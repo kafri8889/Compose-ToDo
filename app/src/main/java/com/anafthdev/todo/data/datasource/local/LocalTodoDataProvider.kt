@@ -2,6 +2,9 @@ package com.anafthdev.todo.data.datasource.local
 
 import com.anafthdev.todo.data.model.Todo
 
+/**
+ * Raw data provider for [Todo]
+ */
 object LocalTodoDataProvider {
 
     val todo1 = Todo(

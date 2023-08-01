@@ -2,6 +2,9 @@ package com.anafthdev.todo.data.datasource.local
 
 import com.anafthdev.todo.data.model.SubTodo
 
+/**
+ * Raw data provider for [SubTodo]
+ */
 object LocalSubTodoDataProvider {
 
     val subTodo1 = SubTodo(

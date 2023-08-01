@@ -23,7 +23,7 @@ class TodoRepository @Inject constructor(
         return todoDao.getTodoByCategoryId(id)
     }
 
-    override fun getTodoByIdWithSubTodo(id: Int): Flow<TodoDbWithSubTodoDb?> {
+    override fun getLocalTodoByIdWithSubTodo(id: Int): Flow<TodoDbWithSubTodoDb?> {
         return todoDao.getTodoByIdWithSubTodo(id)
     }
 
