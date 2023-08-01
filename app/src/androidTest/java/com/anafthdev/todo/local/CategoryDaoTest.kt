@@ -6,8 +6,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.anafthdev.todo.data.datasource.local.AppDatabase
 import com.anafthdev.todo.data.datasource.local.LocalCategoryDataProvider
+import com.anafthdev.todo.data.datasource.local.LocalTodoDataProvider
 import com.anafthdev.todo.data.datasource.local.dao.CategoryDao
+import com.anafthdev.todo.data.datasource.local.dao.TodoDao
 import com.anafthdev.todo.foundation.extension.toCategoryDb
+import com.anafthdev.todo.foundation.extension.toTodoDb
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -20,6 +23,7 @@ class CategoryDaoTest {
 
     private lateinit var appDatabase: AppDatabase
     private lateinit var categoryDao: CategoryDao
+    private lateinit var todoDao: TodoDao
 
     @Before
     fun setUp() {
@@ -29,6 +33,7 @@ class CategoryDaoTest {
             .allowMainThreadQueries()
             .build()
 
+        todoDao = appDatabase.todoDao()
         categoryDao = appDatabase.categoryDao()
     }
 
@@ -66,6 +71,26 @@ class CategoryDaoTest {
 
         categoryDao.getCategoryById(LocalCategoryDataProvider.category1.id).firstOrNull().let { categoryDb ->
             assert(categoryDb != null) { "CategoryDb null" }
+        }
+    }
+
+    @Test
+    fun getCategoryByIdWithTodo() = runTest {
+        val categoryDb = LocalCategoryDataProvider.category1.toCategoryDb()
+        val todoList = LocalTodoDataProvider.values
+            .map { it.toTodoDb() }
+            .filter { it.categoryId == categoryDb.id }
+            .toTypedArray()
+
+        categoryDao.insertCategory(categoryDb)
+        todoDao.insertTodo(*todoList)
+
+        categoryDao.getCategoryByIdWithTodo(categoryDb.id).firstOrNull().let { categoryDbWithTodoDb ->
+            assert(categoryDbWithTodoDb != null) { "Category db with todo db list null" }
+            assert(categoryDbWithTodoDb!!.todoList.isNotEmpty()) { "Todo db list empty" }
+            assert(categoryDbWithTodoDb.todoList.size == todoList.size) {
+                "Todo db list size not equals (${categoryDbWithTodoDb.todoList.size} == ${todoList.size})"
+            }
         }
     }
 
