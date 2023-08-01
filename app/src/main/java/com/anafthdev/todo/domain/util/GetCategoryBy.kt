@@ -2,6 +2,9 @@ package com.anafthdev.todo.domain.util
 
 import com.anafthdev.todo.data.repository.interfaces.ICategoryRepository
 
+/**
+ * Method to get category, used in use case
+ */
 sealed class GetCategoryBy {
 
     /**
