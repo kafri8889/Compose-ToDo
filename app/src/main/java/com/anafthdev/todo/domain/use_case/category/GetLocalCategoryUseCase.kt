@@ -17,6 +17,7 @@ class GetLocalCategoryUseCase(
 
     /**
      * @param getCategoryBy method to get categories
+     * @return list of categories, if [getCategoryBy] is [GetCategoryBy.ID] or [GetCategoryBy.IDWithTodo], returned single item `categories[0]`
      */
     operator fun invoke(
         getCategoryBy: GetCategoryBy = GetCategoryBy.All
