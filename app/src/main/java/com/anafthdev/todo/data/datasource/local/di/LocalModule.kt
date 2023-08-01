@@ -4,6 +4,7 @@ import android.content.Context
 import com.anafthdev.todo.data.datasource.local.AppDatabase
 import com.anafthdev.todo.data.datasource.local.dao.CategoryDao
 import com.anafthdev.todo.data.datasource.local.dao.SubTodoDao
+import com.anafthdev.todo.data.datasource.local.dao.TodoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +33,11 @@ class LocalModule {
     fun provideSubTodoDao(
         appDatabase: AppDatabase
     ): SubTodoDao = appDatabase.subTodoDao()
+
+    @Provides
+    @Singleton
+    fun provideTodoDao(
+        appDatabase: AppDatabase
+    ): TodoDao = appDatabase.todoDao()
 
 }
