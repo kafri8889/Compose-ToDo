@@ -5,11 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.anafthdev.todo.data.datasource.local.dao.CategoryDao
+import com.anafthdev.todo.data.datasource.local.dao.SubTodoDao
 import com.anafthdev.todo.data.model.db.CategoryDb
+import com.anafthdev.todo.data.model.db.SubTodoDb
 
 @Database(
     entities = [
-        CategoryDb::class
+        CategoryDb::class,
+        SubTodoDb::class
     ],
     version = 1,
     exportSchema = false
@@ -17,6 +20,7 @@ import com.anafthdev.todo.data.model.db.CategoryDb
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDao
+    abstract fun subTodoDao(): SubTodoDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null

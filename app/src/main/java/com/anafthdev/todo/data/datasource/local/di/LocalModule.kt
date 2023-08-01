@@ -3,6 +3,7 @@ package com.anafthdev.todo.data.datasource.local.di
 import android.content.Context
 import com.anafthdev.todo.data.datasource.local.AppDatabase
 import com.anafthdev.todo.data.datasource.local.dao.CategoryDao
+import com.anafthdev.todo.data.datasource.local.dao.SubTodoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +26,11 @@ class LocalModule {
     fun provideCategoryDao(
         appDatabase: AppDatabase
     ): CategoryDao = appDatabase.categoryDao()
+
+    @Provides
+    @Singleton
+    fun provideSubTodoDao(
+        appDatabase: AppDatabase
+    ): SubTodoDao = appDatabase.subTodoDao()
 
 }

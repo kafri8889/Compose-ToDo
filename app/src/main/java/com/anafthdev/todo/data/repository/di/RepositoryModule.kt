@@ -4,10 +4,13 @@ import androidx.datastore.core.DataStore
 import com.anafthdev.todo.ProtoUserCredential
 import com.anafthdev.todo.ProtoUserPreference
 import com.anafthdev.todo.data.datasource.local.dao.CategoryDao
+import com.anafthdev.todo.data.datasource.local.dao.SubTodoDao
 import com.anafthdev.todo.data.repository.CategoryRepository
+import com.anafthdev.todo.data.repository.SubTodoRepository
 import com.anafthdev.todo.data.repository.UserCredentialRepository
 import com.anafthdev.todo.data.repository.UserPreferenceRepository
 import com.anafthdev.todo.data.repository.interfaces.ICategoryRepository
+import com.anafthdev.todo.data.repository.interfaces.ISubTodoRepository
 import com.anafthdev.todo.data.repository.interfaces.IUserCredentialRepository
 import com.anafthdev.todo.data.repository.interfaces.IUserPreferenceRepository
 import dagger.Module
@@ -38,6 +41,14 @@ class RepositoryModule {
         categoryDao: CategoryDao
     ): ICategoryRepository = CategoryRepository(
         categoryDao = categoryDao
+    )
+
+    @Provides
+    @Singleton
+    fun provideSubTodoRepository(
+        subTodoDao: SubTodoDao
+    ): ISubTodoRepository = SubTodoRepository(
+        subTodoDao = subTodoDao
     )
 
 }
