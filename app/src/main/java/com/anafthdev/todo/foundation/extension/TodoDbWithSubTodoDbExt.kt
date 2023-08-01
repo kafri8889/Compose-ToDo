@@ -11,5 +11,6 @@ fun TodoDbWithSubTodoDb.toTodo(): Todo {
         description = todoDb.description,
         createdAt = todoDb.createdAt,
         finished = todoDb.finished,
+        subTodo = subTodoDbs.map { it.toSubTodo() }
     )
 }
