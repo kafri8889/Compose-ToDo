@@ -10,7 +10,7 @@ import com.anafthdev.todo.domain.use_case.category.UpsertLocalCategoryUseCase
  * a set of use cases for category
  */
 data class CategoryUseCases(
-    val getLocalCategoryUseCases: GetLocalCategoryUseCase,
+    val getLocalCategoryUseCase: GetLocalCategoryUseCase,
     val upsertLocalCategoryUseCase: UpsertLocalCategoryUseCase,
     val updateLocalCategoryUseCase: UpdateLocalCategoryUseCase,
     val deleteLocalCategoryUseCase: DeleteLocalCategoryUseCase,
