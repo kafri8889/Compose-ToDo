@@ -3,6 +3,7 @@ package com.anafthdev.todo.data.datasource.local.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -36,7 +37,7 @@ interface TodoDao {
     @Delete
     suspend fun deleteTodo(vararg todoDb: TodoDb)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTodo(vararg todoDb: TodoDb)
 
 }
