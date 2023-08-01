@@ -14,7 +14,7 @@ data class UserCredential(
     val name: String,
     val email: String,
     val password: String
-): Parcelable, java.io.Serializable {
+): Parcelable {
 
     /**
      * return true if all value not empty, false otherwise

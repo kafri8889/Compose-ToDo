@@ -2,7 +2,6 @@ package com.anafthdev.todo.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 @Parcelize
 data class SubTodo(
@@ -11,4 +10,4 @@ data class SubTodo(
     val title: String,
     val createdAt: Long,
     val finished: Boolean,
-): Parcelable, Serializable
+): Parcelable
