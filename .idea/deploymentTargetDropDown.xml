@@ -2,10 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CategoryDaoTest">
+      <entry key="SubTodoDaoTest">
+        <State />
+      </entry>
+      <entry key="TodoDaoTest">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="getCategoryByIdWithTodo()">
+        <State />
+      </entry>
+      <entry key="getTodoByIdWithSubTodo()">
         <State />
       </entry>
     </value>

@@ -7,6 +7,16 @@ import com.anafthdev.todo.data.model.Category
  */
 object LocalCategoryDataProvider {
 
+    /**
+     * Used for uncategorized todos
+     *
+     * For example, a user deletes a category, the to-do that uses that category will be changed to Uncategorized To-do
+     */
+    val notCategorized = Category(
+        id = -1,
+        name = "Not categorized",
+    )
+
     val category1 = Category(
         id = 0,
         name = "Category 1"

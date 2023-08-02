@@ -59,6 +59,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -90,7 +91,11 @@ dependencies {
     val lifecycle_version by extra("2.6.1")
     val accompanist_version by extra("0.31.4-beta")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+    implementation(project(mapOf("path" to ":datemodule")))
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -120,7 +125,7 @@ dependencies {
     implementation("androidx.compose.animation:animation-android:${extra["compose_version"]}")
 
     // Constraint layout
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha10")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha11")
 
     // Material Design
     implementation("com.google.android.material:material:1.9.0")
@@ -173,7 +178,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.5.0")
 
     // Other
-    implementation("com.google.code.gson:gson:2.10")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.squareup.wire:wire-runtime:4.4.3")
     implementation("com.maxkeppeler.sheets-compose-dialogs:state:1.2.0")

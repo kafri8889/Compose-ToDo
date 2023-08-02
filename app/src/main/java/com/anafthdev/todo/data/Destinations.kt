@@ -3,8 +3,10 @@ package com.anafthdev.todo.data
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NamedNavArgument
+import com.anafthdev.todo.R
 
 object DestinationRoute {
+    const val DASHBOARD = "dashboard"
     const val SIGN_IN = "sign_up"
     const val SIGN_UP = "sign_in"
 }
@@ -50,4 +52,18 @@ object TopLevelDestinations {
         )
     }
 
+    object Home {
+        const val ROUTE = "home"
+
+        val dashboard = TopLevelDestination(
+            route = DestinationRoute.DASHBOARD,
+            name = R.string.dashboard,
+            icon = R.drawable.ic_dashboard
+        )
+    }
+
 }
+
+val NavigationDrawerDestination = arrayOf(
+    TopLevelDestinations.Home.dashboard
+)

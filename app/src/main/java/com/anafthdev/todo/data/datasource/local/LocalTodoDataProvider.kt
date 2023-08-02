@@ -25,7 +25,7 @@ object LocalTodoDataProvider {
         categoryId = 0,
         title = " todo 2",
         description = "Description 2",
-        createdAt = System.currentTimeMillis(),
+        createdAt = System.currentTimeMillis() - 60000 * 60 * 24,
         finished = true,
         subTodo = listOf(
             LocalSubTodoDataProvider.subTodo3,
