@@ -1,5 +1,6 @@
 package com.anafthdev.todo.data.datasource.local
 
+import com.anafthdev.todo.data.CategoryColors
 import com.anafthdev.todo.data.model.Category
 
 /**
@@ -14,21 +15,25 @@ object LocalCategoryDataProvider {
      */
     val notCategorized = Category(
         id = -1,
+        color = CategoryColors.color_10_light,
         name = "Not categorized",
     )
 
     val category1 = Category(
         id = 0,
+        color = CategoryColors.color_10_light,
         name = "Category 1"
     )
 
     val category2 = Category(
         id = 1,
+        color = CategoryColors.color_10_light,
         name = "Category 2"
     )
 
     val category3 = Category(
         id = 3,
+        color = CategoryColors.color_10_light,
         name = "Category 3"
     )
 

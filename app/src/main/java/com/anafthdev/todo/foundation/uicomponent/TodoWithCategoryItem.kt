@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -30,9 +29,10 @@ import com.anafthdev.datemodule.extension.isToday
 import com.anafthdev.todo.R
 import com.anafthdev.todo.data.datasource.local.LocalCategoryDataProvider
 import com.anafthdev.todo.data.datasource.local.LocalTodoDataProvider
+import com.anafthdev.todo.data.model.CategoryColor
 import com.anafthdev.todo.data.model.Todo
 import com.anafthdev.todo.data.model.TodoWithCategory
-import com.anafthdev.todo.foundation.common.DateFormatter
+import com.anafthdev.todo.foundation.common.Formatter
 import com.anafthdev.todo.theme.ToDoTheme
 
 @Preview
@@ -95,7 +95,7 @@ fun TodoWithCategoryItem(
                 HorizontalDivider()
 
                 BottomContent(
-                    color = Color.Black,
+                    color = todoWithCategory.category.color,
                     todo = todoWithCategory.todo,
                     modifier = Modifier
                         .padding(8.dp)
@@ -152,17 +152,23 @@ private fun TopContent(
 
 @Composable
 private fun BottomContent(
-    color: Color,
+    color: CategoryColor,
     todo: Todo,
     modifier: Modifier = Modifier
 ) {
+    val date = buildString {
+        append(if (todo.createdAt.isToday()) stringResource(id = R.string.today) else Formatter.mediumDateFormatter.format(todo.createdAt))
+        append("  ")
+        append(Formatter.hourMinuteFormatter.format(todo.createdAt))
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
         Text(
-            text = if (todo.createdAt.isToday()) stringResource(id = R.string.today) else DateFormatter.mediumDateFormatter.format(todo.createdAt),
+            text = date,
             style = MaterialTheme.typography.bodySmall
         )
 
@@ -171,14 +177,16 @@ private fun BottomContent(
             modifier = Modifier
                 .minimumInteractiveComponentSize()
                 .clip(CircleShape)
-                .background(color)
+                .background(color.secondary)
         ) {
             Text(
                 text = stringResource(
                     id = R.string.n_sub_todo,
                     todo.subTodo.size
                 ),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onSecondary
+                ),
                 modifier = Modifier
                     .padding(8.dp)
             )

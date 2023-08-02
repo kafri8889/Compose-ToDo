@@ -7,5 +7,6 @@ fun Category.toCategoryDb(): CategoryDb {
     return CategoryDb(
         id = id,
         name = name,
+        colorId = color.id
     )
 }
