@@ -3,4 +3,5 @@
     <string name="dashboard">Dashboard</string>
     <string name="today">Today</string>
     <string name="n_sub_todo">%1$s Sub todo</string>
+    <string name="completed">Completed</string>
 </resources>

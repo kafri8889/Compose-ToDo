@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anafthdev.todo.data.datasource.local.LocalCategoryDataProvider
+import com.anafthdev.todo.data.datasource.local.LocalTodoDataProvider
+import com.anafthdev.todo.data.model.Todo
 import com.anafthdev.todo.data.model.TodoWithCategory
 import com.anafthdev.todo.domain.use_case.CategoryUseCases
 import com.anafthdev.todo.domain.use_case.TodoUseCases
@@ -22,38 +24,36 @@ class DashboardViewModel @Inject constructor(
 ): ViewModel() {
 
     val todoWithCategory = mutableStateListOf<TodoWithCategory>()
+    val completedTodoWithCategory = mutableStateListOf<TodoWithCategory>()
 
     init {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            categoryUseCases.getLocalCategoryUseCase().collect { categoryList ->
-//                withContext(Dispatchers.Main) {
-//                    categories.swap(categoryList)
-//                }
-//            }
-//        }
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            todoUseCases.getLocalTodoUseCase().collect { list ->
-//                withContext(Dispatchers.Main) {
-//                    todoList.swap(list)
-//                }
-//            }
-//        }
-
         viewModelScope.launch(Dispatchers.IO) {
             todoUseCases.getLocalTodoUseCase().combine(
                 categoryUseCases.getLocalCategoryUseCase()
             ) { todoList, categoryList ->
-                todoList to categoryList
+//                todoList to categoryList
+                LocalTodoDataProvider.values to LocalCategoryDataProvider.values
             }.collect { (todoList, categoryList) ->
                 val todoArrayList = arrayListOf<TodoWithCategory>()
+                val completedTodoArrayList = arrayListOf<TodoWithCategory>()
                 for (todo in todoList) {
                     val category = categoryList.find { it.id == todo.categoryId } ?: LocalCategoryDataProvider.notCategorized
-                    todoArrayList.add(TodoWithCategory(todo, category))
+                    val twc = TodoWithCategory(todo, category)
+                    if (todo.finished) completedTodoArrayList.add(twc)
+                    todoArrayList.add(twc)
                 }
 
-                withContext(Dispatchers.Main) { todoWithCategory.swap(todoArrayList) }
+                withContext(Dispatchers.Main) {
+                    todoWithCategory.swap(todoArrayList)
+                    completedTodoWithCategory.swap(completedTodoArrayList)
+                }
             }
+        }
+    }
+
+    fun updateTodo(todo: Todo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            todoUseCases.updateLocalTodoUseCase(todo)
         }
     }
 

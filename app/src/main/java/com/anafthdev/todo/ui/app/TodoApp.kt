@@ -1,6 +1,5 @@
 package com.anafthdev.todo.ui.app
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.DrawerValue
@@ -8,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -28,12 +29,14 @@ import com.anafthdev.todo.data.NavigationDrawerDestination
 import com.anafthdev.todo.data.TopLevelDestination
 import com.anafthdev.todo.data.TopLevelDestinations
 import com.anafthdev.todo.theme.ToDoTheme
+import com.anafthdev.todo.ui.dashboard.DashboardScreen
+import com.anafthdev.todo.ui.dashboard.DashboardViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @Composable
 fun TodoApp(
-    inDarkTheme: Boolean = isSystemInDarkTheme()
+    inDarkTheme: Boolean = false
 ) {
 
     val systemUiController = rememberSystemUiController()
@@ -43,7 +46,7 @@ fun TodoApp(
 
     val backStackEntry by navController.currentBackStackEntryAsState()
 
-    ToDoTheme {
+    ToDoTheme(darkTheme = inDarkTheme) {
         SideEffect {
             systemUiController.setSystemBarsColor(
                 color = Color.Transparent,
@@ -51,29 +54,41 @@ fun TodoApp(
             )
         }
 
-        ModalNavigationDrawer(
-            drawerContent = {
-                DrawerContent(
-                    selectedRoute = backStackEntry?.destination?.route ?: "",
-                    onDestinationClicked = { destination ->
-                        navController.navigate(destination.route)
-                        scope.launch {
-                            drawerState.close()
+        Surface {
+            ModalNavigationDrawer(
+                drawerContent = {
+                    DrawerContent(
+                        selectedRoute = backStackEntry?.destination?.route ?: "",
+                        onDestinationClicked = { destination ->
+                            navController.navigate(destination.route)
+                            scope.launch {
+                                drawerState.close()
+                            }
                         }
-                    }
-                )
-            }
-        ) {
-            NavHost(
-                navController = navController,
-                startDestination = TopLevelDestinations.Home.ROUTE,
+                    )
+                }
             ) {
-                navigation(
-                    startDestination = TopLevelDestinations.Home.dashboard.route,
-                    route = TopLevelDestinations.Home.ROUTE
+                NavHost(
+                    navController = navController,
+                    startDestination = TopLevelDestinations.Home.ROUTE,
                 ) {
-                    composable(TopLevelDestinations.Home.dashboard.route) { backEntry ->
+                    navigation(
+                        startDestination = TopLevelDestinations.Home.dashboard.route,
+                        route = TopLevelDestinations.Home.ROUTE
+                    ) {
+                        composable(TopLevelDestinations.Home.dashboard.route) { backEntry ->
+                            val viewModel = hiltViewModel<DashboardViewModel>(backEntry)
 
+                            DashboardScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                onNavigationIconClicked = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }

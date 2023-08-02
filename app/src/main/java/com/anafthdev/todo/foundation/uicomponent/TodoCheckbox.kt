@@ -54,11 +54,6 @@ fun TodoCheckbox(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .minimumInteractiveComponentSize()
-            .toggleable(
-                value = checked,
-                role = Role.Checkbox,
-                onValueChange = onCheckedChange
-            )
             .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
             .clip(CircleShape)
             .border(
@@ -68,6 +63,11 @@ fun TodoCheckbox(
             )
             .background(if (checked) checkedContainerColor else Color.Transparent)
             .then(modifier)
+            .toggleable(
+                value = checked,
+                role = Role.Checkbox,
+                onValueChange = onCheckedChange
+            )
     ) {
         Box(
             contentAlignment = Alignment.Center,
