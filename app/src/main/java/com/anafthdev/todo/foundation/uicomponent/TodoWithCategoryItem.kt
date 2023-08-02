@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -71,7 +72,10 @@ fun TodoWithCategoryItem(
 ) {
     Card(
         onClick = onClick,
-        shape = RoundedCornerShape(25)
+        shape = RoundedCornerShape(25),
+        colors = CardDefaults.cardColors(
+            containerColor = todoWithCategory.category.color.surfaceVariant
+        )
     ) {
         Row(
             modifier = modifier
@@ -82,17 +86,15 @@ fun TodoWithCategoryItem(
                     .weight(0.9f)
             ) {
                 TopContent(
-                    finished = todoWithCategory.todo.finished,
-                    checked = todoWithCategory.todo.finished,
-                    title = todoWithCategory.todo.title,
-                    description = todoWithCategory.todo.description,
+                    todo = todoWithCategory.todo,
+                    categoryColor = todoWithCategory.category.color,
                     onCheckedChange = onCheckedChange,
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                 )
 
-                HorizontalDivider()
+                HorizontalDivider(color = todoWithCategory.category.color.outline)
 
                 BottomContent(
                     color = todoWithCategory.category.color,
@@ -108,10 +110,8 @@ fun TodoWithCategoryItem(
 
 @Composable
 private fun TopContent(
-    checked: Boolean,
-    finished: Boolean,
-    title: String,
-    description: String,
+    todo: Todo,
+    categoryColor: CategoryColor,
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -126,17 +126,17 @@ private fun TopContent(
                 .weight(1f)
         ) {
             Text(
-                text = title,
+                text = todo.title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textDecoration = if (finished) TextDecoration.LineThrough else null,
+                textDecoration = if (todo.finished) TextDecoration.LineThrough else null,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.SemiBold
                 )
             )
 
             Text(
-                text = description,
+                text = todo.description,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium
@@ -144,8 +144,9 @@ private fun TopContent(
         }
 
         TodoCheckbox(
-            checked = checked,
-            onCheckedChange = onCheckedChange
+            checked = todo.finished,
+            onCheckedChange = onCheckedChange,
+            checkedContainerColor = categoryColor.primary
         )
     }
 }
@@ -185,7 +186,7 @@ private fun BottomContent(
                     todo.subTodo.size
                 ),
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSecondary
+                    color = color.onSecondary
                 ),
                 modifier = Modifier
                     .padding(8.dp)

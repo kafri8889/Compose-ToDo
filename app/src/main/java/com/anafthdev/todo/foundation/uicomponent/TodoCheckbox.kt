@@ -46,6 +46,7 @@ private fun TodoCheckboxPreview(
 fun TodoCheckbox(
     checked: Boolean,
     modifier: Modifier = Modifier,
+    checkedContainerColor: Color = MaterialTheme.colorScheme.primary,
     onCheckedChange: (Boolean) -> Unit,
 ) {
 
@@ -65,7 +66,7 @@ fun TodoCheckbox(
                 color = if (checked) Color.Transparent else MaterialTheme.colorScheme.outline,
                 shape = CircleShape
             )
-            .background(if (checked) MaterialTheme.colorScheme.primary else Color.Transparent)
+            .background(if (checked) checkedContainerColor else Color.Transparent)
             .then(modifier)
     ) {
         Box(
