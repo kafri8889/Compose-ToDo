@@ -1,20 +1,27 @@
 package com.anafthdev.todo.ui.app
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -36,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.anafthdev.todo.data.NavigationDrawerDestination
 import com.anafthdev.todo.data.TopLevelDestination
 import com.anafthdev.todo.data.TopLevelDestinations
+import com.anafthdev.todo.data.model.Category
 import com.anafthdev.todo.theme.ToDoTheme
 import com.anafthdev.todo.ui.dashboard.DashboardScreen
 import com.anafthdev.todo.ui.dashboard.DashboardViewModel
@@ -51,7 +59,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun TodoApp(
-    inDarkTheme: Boolean = false
+    inDarkTheme: Boolean = false,
+    viewModel: TodoAppViewModel
 ) {
 
     val density = LocalDensity.current
@@ -87,8 +96,14 @@ fun TodoApp(
                 drawerContent = {
                     DrawerContent(
                         selectedRoute = backStackEntry?.destination?.route ?: "",
+                        categories = viewModel.categories,
                         onDestinationClicked = { destination ->
                             navController.navigate(destination.route)
+                            scope.launch {
+                                drawerState.close()
+                            }
+                        },
+                        onDismissRequest = {
                             scope.launch {
                                 drawerState.close()
                             }
@@ -144,34 +159,65 @@ fun TodoApp(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DrawerContent(
     selectedRoute: String,
-    onDestinationClicked: (TopLevelDestination) -> Unit
+    categories: List<Category>,
+    onDestinationClicked: (TopLevelDestination) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     ModalDrawerSheet {
-        Spacer(Modifier.height(12.dp))
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                TopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        IconButton(onClick = onDismissRequest) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = "Close"
+                            )
+                        }
+                    }
+                )
+            }
 
-        for (destination in NavigationDrawerDestination) {
-            NavigationDrawerItem(
-                selected = selectedRoute == destination.route,
-                label = {
-                    Text(stringResource(id = destination.name!!))
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = destination.icon!!),
-                        contentDescription = null
-                    )
-                },
-                onClick = {
-                    onDestinationClicked(destination)
-                },
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-            )
+            items(
+                items = NavigationDrawerDestination,
+                key = { item -> item.route }
+            ) { destination ->
+                NavigationDrawerItem(
+                    selected = selectedRoute == destination.route,
+                    label = {
+                        Text(stringResource(id = destination.name!!))
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = destination.icon!!),
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        onDestinationClicked(destination)
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                )
+            }
 
-            Spacer(Modifier.height(12.dp))
+            item {
+                HorizontalDivider()
+            }
+
+            items(
+                items = categories,
+                key = { item -> item.id }
+            ) { category ->
+
+            }
         }
     }
 }

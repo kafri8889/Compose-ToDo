@@ -63,7 +63,9 @@ fun DashboardScreen(
             FloatingActionButton(
                 onClick = {
                     navController.navigate(TopLevelDestinations.Home.newTodo.route)
-                }
+                },
+                modifier = Modifier
+                    .padding(8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
