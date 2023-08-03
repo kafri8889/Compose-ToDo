@@ -81,7 +81,7 @@ fun DashboardScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
-                .padding(8.dp)
+                .padding(vertical = 8.dp)
                 .fillMaxSize()
                 .padding(scaffoldPadding)
         ) {
@@ -98,6 +98,7 @@ fun DashboardScreen(
 
                     },
                     modifier = Modifier
+                        .fillMaxWidth(0.92f)
                         .animateItemPlacement(tween(256))
                 )
             }
@@ -108,7 +109,7 @@ fun DashboardScreen(
                         text = stringResource(id = R.string.completed),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(0.92f)
                             .animateItemPlacement(tween(256))
                     )
                 }
@@ -127,6 +128,7 @@ fun DashboardScreen(
 
                     },
                     modifier = Modifier
+                        .fillMaxWidth(0.92f)
                         .animateItemPlacement(tween(256))
                 )
             }

@@ -1,6 +1,7 @@
 package com.anafthdev.todo.ui.app
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +29,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -44,6 +46,7 @@ import com.anafthdev.todo.data.NavigationDrawerDestination
 import com.anafthdev.todo.data.TopLevelDestination
 import com.anafthdev.todo.data.TopLevelDestinations
 import com.anafthdev.todo.data.model.Category
+import com.anafthdev.todo.foundation.uicomponent.CategoryItem
 import com.anafthdev.todo.theme.ToDoTheme
 import com.anafthdev.todo.ui.category.CategoryScreen
 import com.anafthdev.todo.ui.category.CategoryViewModel
@@ -209,7 +212,8 @@ private fun DrawerContent(
 ) {
     ModalDrawerSheet {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 TopAppBar(
@@ -244,19 +248,29 @@ private fun DrawerContent(
                         onDestinationClicked(destination)
                     },
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .fillMaxWidth(0.92f)
                 )
             }
 
             item {
-                HorizontalDivider()
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                )
             }
 
             items(
                 items = categories,
                 key = { item -> item.id }
             ) { category ->
+                CategoryItem(
+                    category = category,
+                    onClick = {
 
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.92f)
+                )
             }
         }
     }

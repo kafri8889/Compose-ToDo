@@ -2,6 +2,7 @@ package com.anafthdev.todo.ui.category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.anafthdev.todo.data.DestinationArgument
 import com.anafthdev.todo.data.TopLevelDestinations
+import com.anafthdev.todo.foundation.uicomponent.CategoryItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +90,14 @@ fun CategoryScreen(
                 items = viewModel.categories,
                 key = { item -> item.id }
             ) { category ->
+                CategoryItem(
+                    category = category,
+                    onClick = {
 
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.92f)
+                )
             }
         }
     }
