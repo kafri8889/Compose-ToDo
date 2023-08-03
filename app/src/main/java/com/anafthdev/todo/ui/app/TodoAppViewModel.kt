@@ -21,10 +21,15 @@ class TodoAppViewModel @Inject constructor(
     val categories = mutableStateListOf<Category>()
 
     init {
+        // Insert default category
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryUseCases.insertLocalCategoryUseCase(LocalCategoryDataProvider.notCategorized)
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             categoryUseCases.getLocalCategoryUseCase().collect { list ->
                 withContext(Dispatchers.Main) {
-                    categories.swap(listOf(LocalCategoryDataProvider.notCategorized) + list)
+                    categories.swap(list)
                 }
             }
         }

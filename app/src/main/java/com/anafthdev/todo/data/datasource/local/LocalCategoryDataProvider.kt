@@ -15,7 +15,7 @@ object LocalCategoryDataProvider {
      */
     val notCategorized = Category(
         id = -1,
-        color = CategoryColors.color_10_light,
+        color = CategoryColors.color_1_light,
         name = "Not categorized",
     )
 

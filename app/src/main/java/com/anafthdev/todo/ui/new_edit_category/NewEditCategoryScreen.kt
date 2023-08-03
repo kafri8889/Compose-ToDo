@@ -30,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -59,7 +58,10 @@ fun NewEditCategoryScreen(
         DragHandle()
 
         Text(
-            text = stringResource(id = R.string.new_category),
+            text = stringResource(
+                id = if (viewModel.isEdit) R.string.edit_category
+                else R.string.new_category
+            ),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -135,11 +137,11 @@ private fun NameTextField(
         onValueChange = onValueChange,
         shape = RoundedCornerShape(25),
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(
             onNext = {
-                focusManager.moveFocus(FocusDirection.Next)
+                focusManager.clearFocus()
             }
         ),
         colors = TextFieldDefaults.colors(

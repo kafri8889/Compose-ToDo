@@ -19,6 +19,11 @@ interface ICategoryRepository {
     fun getLocalCategoryById(id: Int): Flow<CategoryDb?>
 
     /**
+     * Get all category from database with to-do
+     */
+    fun getAllLocalCategoryWithTodo(): Flow<List<CategoryDbWithTodoDb>>
+
+    /**
      * Get category from database by id, and also to-do if [TodoDb.categoryId] equals [CategoryDb.id].
      *
      * Check [CategoryDao.getCategoryByIdWithTodo]

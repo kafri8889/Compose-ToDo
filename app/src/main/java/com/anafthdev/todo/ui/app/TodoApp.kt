@@ -248,7 +248,7 @@ private fun DrawerContent(
                         onDestinationClicked(destination)
                     },
                     modifier = Modifier
-                        .fillMaxWidth(0.92f)
+                        .fillMaxWidth(0.96f)
                 )
             }
 
@@ -265,11 +265,8 @@ private fun DrawerContent(
             ) { category ->
                 CategoryItem(
                     category = category,
-                    onClick = {
-
-                    },
                     modifier = Modifier
-                        .fillMaxWidth(0.92f)
+                        .fillMaxWidth(0.96f)
                 )
             }
         }

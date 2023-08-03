@@ -25,6 +25,8 @@ class GetLocalCategoryUseCase(
         return when (getCategoryBy) {
             is GetCategoryBy.All -> categoryRepository.getAllLocalCategory()
                 .map { it.map { it.toCategory() } }
+            is GetCategoryBy.AllWithTodo -> categoryRepository.getAllLocalCategoryWithTodo()
+                .map { it.map { it.toCategory() } }
             is GetCategoryBy.ID -> categoryRepository.getLocalCategoryById(getCategoryBy.id)
                 .filterNotNull()
                 .map { listOf(it.toCategory()) }

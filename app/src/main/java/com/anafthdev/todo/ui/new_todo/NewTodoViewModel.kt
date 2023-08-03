@@ -35,7 +35,7 @@ class NewTodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             categoryUseCases.getLocalCategoryUseCase().collect { list ->
                 withContext(Dispatchers.Main) {
-                    categories.swap(listOf(LocalCategoryDataProvider.notCategorized) +  list)
+                    categories.swap(list)
                 }
             }
         }

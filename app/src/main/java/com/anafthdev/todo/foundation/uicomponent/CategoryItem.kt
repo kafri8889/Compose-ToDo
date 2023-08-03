@@ -2,7 +2,6 @@ package com.anafthdev.todo.foundation.uicomponent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +30,6 @@ import com.anafthdev.todo.theme.ToDoTheme
 private fun CategoryItemPreview() {
     ToDoTheme {
         CategoryItem(
-            onClick = {},
             category = LocalCategoryDataProvider.category1.copy(
                 todo = LocalTodoDataProvider.values.toList()
             )
@@ -41,19 +37,12 @@ private fun CategoryItemPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryItem(
     category: Category,
-    modifier: Modifier = Modifier,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClick: () -> Unit
+    modifier: Modifier = Modifier
 ) {
-    Card(
-        onClick = onClick,
-        interactionSource = interactionSource,
-        modifier = modifier
-    ) {
+    Card(modifier = modifier) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,

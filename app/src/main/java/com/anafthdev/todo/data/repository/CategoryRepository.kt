@@ -19,6 +19,10 @@ class CategoryRepository @Inject constructor(
         return categoryDao.getCategoryById(id)
     }
 
+    override fun getAllLocalCategoryWithTodo(): Flow<List<CategoryDbWithTodoDb>> {
+        return categoryDao.getAllCategoryWithTodo()
+    }
+
     override fun getLocalCategoryByIdWithTodo(id: Int): Flow<CategoryDbWithTodoDb?> {
         return categoryDao.getCategoryByIdWithTodo(id)
     }

@@ -20,6 +20,7 @@ object DestinationRoute {
  * Key for argument
  */
 object DestinationArgument {
+    const val CATEGORY_ID = "category_id"
     const val IS_EDIT = "is_edit"
 }
 
@@ -74,11 +75,16 @@ object TopLevelDestinations {
 
         val newEditCategory = TopLevelDestination(
             route = "${DestinationRoute.NEW_EDIT_CATEGORY}?" +
-                    "${DestinationArgument.IS_EDIT}={${DestinationArgument.IS_EDIT}}",
+                    "${DestinationArgument.IS_EDIT}={${DestinationArgument.IS_EDIT}}&" +
+                    "${DestinationArgument.CATEGORY_ID}={${DestinationArgument.CATEGORY_ID}}",
             arguments = listOf(
                 navArgument(DestinationArgument.IS_EDIT) {
                     type = NavType.BoolType
                     defaultValue = false
+                },
+                navArgument(DestinationArgument.CATEGORY_ID) {
+                    type = NavType.IntType
+                    defaultValue = -1
                 }
             )
         )

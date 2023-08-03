@@ -21,6 +21,9 @@ interface CategoryDao {
     @Query("SELECT * FROM category_table WHERE id_category LIKE :id")
     fun getCategoryById(id: Int): Flow<CategoryDb?>
 
+    @Query("SELECT * FROM category_table")
+    fun getAllCategoryWithTodo(): Flow<List<CategoryDbWithTodoDb>>
+
     @Transaction
     @Query("SELECT * FROM category_table WHERE id_category LIKE :id")
     fun getCategoryByIdWithTodo(id: Int): Flow<CategoryDbWithTodoDb?>

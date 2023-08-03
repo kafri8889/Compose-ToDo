@@ -13,6 +13,11 @@ sealed class GetCategoryBy {
     object All: GetCategoryBy()
 
     /**
+     * Get all category with to-do
+     */
+    object AllWithTodo: GetCategoryBy()
+
+    /**
      * Get category by id
      */
     data class ID(val id: Int): GetCategoryBy()

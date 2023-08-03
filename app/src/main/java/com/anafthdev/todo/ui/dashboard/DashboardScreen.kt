@@ -98,7 +98,7 @@ fun DashboardScreen(
 
                     },
                     modifier = Modifier
-                        .fillMaxWidth(0.92f)
+                        .fillMaxWidth(0.96f)
                         .animateItemPlacement(tween(256))
                 )
             }
@@ -109,7 +109,7 @@ fun DashboardScreen(
                         text = stringResource(id = R.string.completed),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
-                            .fillMaxWidth(0.92f)
+                            .fillMaxWidth(0.96f)
                             .animateItemPlacement(tween(256))
                     )
                 }
@@ -128,7 +128,7 @@ fun DashboardScreen(
 
                     },
                     modifier = Modifier
-                        .fillMaxWidth(0.92f)
+                        .fillMaxWidth(0.96f)
                         .animateItemPlacement(tween(256))
                 )
             }
