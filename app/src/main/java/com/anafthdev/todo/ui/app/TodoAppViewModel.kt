@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.anafthdev.todo.data.datasource.local.LocalCategoryDataProvider
 import com.anafthdev.todo.data.model.Category
 import com.anafthdev.todo.domain.use_case.CategoryUseCases
+import com.anafthdev.todo.domain.util.GetCategoryBy
 import com.anafthdev.todo.foundation.extension.swap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,9 @@ class TodoAppViewModel @Inject constructor(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            categoryUseCases.getLocalCategoryUseCase().collect { list ->
+            categoryUseCases.getLocalCategoryUseCase(
+                getCategoryBy = GetCategoryBy.AllWithTodo
+            ).collect { list ->
                 withContext(Dispatchers.Main) {
                     categories.swap(list)
                 }
