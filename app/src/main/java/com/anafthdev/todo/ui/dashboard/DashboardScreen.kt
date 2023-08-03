@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +59,18 @@ fun DashboardScreen(
                 }
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(TopLevelDestinations.Home.newTodo.route)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = "New ToDo"
+                )
+            }
+        },
         modifier = Modifier
             .systemBarsPadding()
             .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
@@ -68,18 +83,28 @@ fun DashboardScreen(
                 .fillMaxSize()
                 .padding(scaffoldPadding)
         ) {
-//            items(
-//                items = viewModel.todoWithCategory,
-//                key = { item -> item.todo.id }
-//            ) { todoWithCategory ->
-//
-//            }
+            items(
+                items = viewModel.todoWithCategory,
+                key = { item -> item.todo.id }
+            ) { todoWithCategory ->
+                TodoWithCategoryItem(
+                    todoWithCategory = todoWithCategory,
+                    onCheckedChange = { checked ->
+                        viewModel.updateTodo(todoWithCategory.todo.copy(finished = checked))
+                    },
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .animateItemPlacement(tween(256))
+                )
+            }
 
             if (viewModel.completedTodoWithCategory.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(id = R.string.completed),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .fillMaxWidth()
                             .animateItemPlacement(tween(256))

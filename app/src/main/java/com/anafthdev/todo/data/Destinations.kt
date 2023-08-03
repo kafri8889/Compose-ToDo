@@ -7,6 +7,7 @@ import com.anafthdev.todo.R
 
 object DestinationRoute {
     const val DASHBOARD = "dashboard"
+    const val NEW_TODO = "new_todo"
     const val SIGN_IN = "sign_up"
     const val SIGN_UP = "sign_in"
 }
@@ -59,6 +60,10 @@ object TopLevelDestinations {
             route = DestinationRoute.DASHBOARD,
             name = R.string.dashboard,
             icon = R.drawable.ic_dashboard
+        )
+
+        val newTodo = TopLevelDestination(
+            route = DestinationRoute.NEW_TODO
         )
     }
 

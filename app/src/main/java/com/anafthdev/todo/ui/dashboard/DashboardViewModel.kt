@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anafthdev.todo.data.datasource.local.LocalCategoryDataProvider
-import com.anafthdev.todo.data.datasource.local.LocalTodoDataProvider
 import com.anafthdev.todo.data.model.Todo
 import com.anafthdev.todo.data.model.TodoWithCategory
 import com.anafthdev.todo.domain.use_case.CategoryUseCases
@@ -31,8 +30,8 @@ class DashboardViewModel @Inject constructor(
             todoUseCases.getLocalTodoUseCase().combine(
                 categoryUseCases.getLocalCategoryUseCase()
             ) { todoList, categoryList ->
-//                todoList to categoryList
-                LocalTodoDataProvider.values to LocalCategoryDataProvider.values
+                todoList to categoryList
+//                LocalTodoDataProvider.values to LocalCategoryDataProvider.values
             }.collect { (todoList, categoryList) ->
                 val todoArrayList = arrayListOf<TodoWithCategory>()
                 val completedTodoArrayList = arrayListOf<TodoWithCategory>()
@@ -40,7 +39,7 @@ class DashboardViewModel @Inject constructor(
                     val category = categoryList.find { it.id == todo.categoryId } ?: LocalCategoryDataProvider.notCategorized
                     val twc = TodoWithCategory(todo, category)
                     if (todo.finished) completedTodoArrayList.add(twc)
-                    todoArrayList.add(twc)
+                    else todoArrayList.add(twc)
                 }
 
                 withContext(Dispatchers.Main) {

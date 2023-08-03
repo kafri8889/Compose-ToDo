@@ -72,7 +72,7 @@ fun TodoWithCategoryItem(
 ) {
     Card(
         onClick = onClick,
-        shape = RoundedCornerShape(25),
+        shape = RoundedCornerShape(16),
         colors = CardDefaults.cardColors(
             containerColor = todoWithCategory.category.color.surfaceVariant
         )
