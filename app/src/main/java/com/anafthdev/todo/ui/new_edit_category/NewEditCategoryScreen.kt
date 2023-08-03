@@ -1,19 +1,25 @@
-package com.anafthdev.todo.ui.new_todo
+package com.anafthdev.todo.ui.new_edit_category
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -23,6 +29,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -34,15 +41,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.anafthdev.todo.R
-import com.anafthdev.todo.data.model.Category
+import com.anafthdev.todo.data.CategoryColors
+import com.anafthdev.todo.data.model.CategoryColor
 import com.anafthdev.todo.foundation.uicomponent.DragHandle
 
 @Composable
-fun NewTodoScreen(
+fun NewEditCategoryScreen(
     navController: NavController,
-    viewModel: NewTodoViewModel
+    viewModel: NewEditCategoryViewModel
 ) {
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -52,7 +59,7 @@ fun NewTodoScreen(
         DragHandle()
 
         Text(
-            text = stringResource(id = R.string.new_todo),
+            text = stringResource(id = R.string.new_category),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -62,22 +69,16 @@ fun NewTodoScreen(
 
         HorizontalDivider()
 
-        TitleTextField(
-            title = viewModel.title,
-            onValueChange = viewModel::updateTitle,
+        NameTextField(
+            name = viewModel.name,
+            onValueChange = viewModel::updateName,
         )
 
-        DescriptionTextField(
-            description = viewModel.description,
-            onValueChange = viewModel::updateDescription
+        CategoryColorSelector(
+            selectedColor = viewModel.color,
+            onColorChanged = viewModel::updateColor
         )
 
-        CategorySelector(
-            categories = viewModel.categories,
-            selectedCategory = viewModel.selectedCategory,
-            onCategoryChange = viewModel::updateSelectedCategory
-        )
-        
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
@@ -97,7 +98,7 @@ fun NewTodoScreen(
             }
 
             Button(
-                enabled = viewModel.title.isNotBlank(),
+                enabled = viewModel.name.isNotBlank(),
                 shape = RoundedCornerShape(25),
                 onClick = {
                     viewModel.save()
@@ -113,14 +114,14 @@ fun NewTodoScreen(
 }
 
 @Composable
-private fun TitleTextField(
-    title: String,
+private fun NameTextField(
+    name: String,
     onValueChange: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
     Text(
-        text = stringResource(id = R.string.title),
+        text = stringResource(id = R.string.name),
         style = MaterialTheme.typography.titleMedium.copy(
             fontWeight = FontWeight.Medium
         ),
@@ -130,7 +131,7 @@ private fun TitleTextField(
 
     TextField(
         singleLine = true,
-        value = title,
+        value = name,
         onValueChange = onValueChange,
         shape = RoundedCornerShape(25),
         keyboardOptions = KeyboardOptions(
@@ -146,7 +147,7 @@ private fun TitleTextField(
             focusedIndicatorColor = Color.Transparent
         ),
         placeholder = {
-            Text(stringResource(id = R.string.add_todo_name))
+            Text(stringResource(id = R.string.add_category_name))
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -155,13 +156,14 @@ private fun TitleTextField(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun DescriptionTextField(
-    description: String,
-    onValueChange: (String) -> Unit
+private fun CategoryColorSelector(
+    selectedColor: CategoryColor,
+    onColorChanged: (CategoryColor) -> Unit
 ) {
     Text(
-        text = stringResource(id = R.string.title),
+        text = stringResource(id = R.string.color),
         style = MaterialTheme.typography.titleMedium.copy(
             fontWeight = FontWeight.Medium
         ),
@@ -169,58 +171,34 @@ private fun DescriptionTextField(
             .fillMaxWidth()
     )
 
-    TextField(
-        minLines = 3,
-        maxLines = 5,
-        value = description,
-        onValueChange = onValueChange,
-        shape = RoundedCornerShape(25),
-        colors = TextFieldDefaults.colors(
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent
-        ),
-        placeholder = {
-            Text(stringResource(id = R.string.add_description))
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CategorySelector(
-    categories: List<Category>,
-    selectedCategory: Category,
-    onCategoryChange: (Category) -> Unit
-) {
-    Text(
-        text = stringResource(id = R.string.category),
-        style = MaterialTheme.typography.titleMedium.copy(
-            fontWeight = FontWeight.Medium
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-    )
-
-    LazyRow(
+    FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(
-            items = categories,
-            key = { item -> item.id }
-        ) { category ->
-            FilterChip(
-                selected = selectedCategory.id == category.id,
-                label = {
-                    Text(category.name)
-                },
-                onClick = {
-                    onCategoryChange(category)
+        for (color in CategoryColors.valuesLight) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(color.primary)
+                    .clickable {
+                        onColorChanged(color)
+                    }
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = color.id == selectedColor.id,
+                    enter = scaleIn(tween(256)),
+                    exit = scaleOut(tween(256))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clip(CircleShape)
+                            .background(color.onPrimary)
+                    )
                 }
-            )
+            }
         }
     }
 }

@@ -3,10 +3,14 @@ package com.anafthdev.todo.data
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.anafthdev.todo.R
 
 object DestinationRoute {
+    const val NEW_EDIT_CATEGORY = "new_edit_category"
     const val DASHBOARD = "dashboard"
+    const val CATEGORY = "category"
     const val NEW_TODO = "new_todo"
     const val SIGN_IN = "sign_up"
     const val SIGN_UP = "sign_in"
@@ -16,7 +20,7 @@ object DestinationRoute {
  * Key for argument
  */
 object DestinationArgument {
-
+    const val IS_EDIT = "is_edit"
 }
 
 data class TopLevelDestination(
@@ -62,6 +66,23 @@ object TopLevelDestinations {
             icon = R.drawable.ic_dashboard
         )
 
+        val category = TopLevelDestination(
+            route = DestinationRoute.CATEGORY,
+            name = R.string.category,
+            icon = R.drawable.ic_categories
+        )
+
+        val newEditCategory = TopLevelDestination(
+            route = "${DestinationRoute.NEW_EDIT_CATEGORY}?" +
+                    "${DestinationArgument.IS_EDIT}={${DestinationArgument.IS_EDIT}}",
+            arguments = listOf(
+                navArgument(DestinationArgument.IS_EDIT) {
+                    type = NavType.BoolType
+                    defaultValue = false
+                }
+            )
+        )
+
         val newTodo = TopLevelDestination(
             route = DestinationRoute.NEW_TODO
         )
@@ -70,5 +91,6 @@ object TopLevelDestinations {
 }
 
 val NavigationDrawerDestination = arrayOf(
-    TopLevelDestinations.Home.dashboard
+    TopLevelDestinations.Home.dashboard,
+    TopLevelDestinations.Home.category
 )

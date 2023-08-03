@@ -11,4 +11,8 @@
     <string name="category">Category</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="add_category_name">Add category name...</string>
+    <string name="color">Color</string>
+    <string name="new_category">New Category</string>
 </resources>

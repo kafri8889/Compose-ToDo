@@ -45,8 +45,12 @@ import com.anafthdev.todo.data.TopLevelDestination
 import com.anafthdev.todo.data.TopLevelDestinations
 import com.anafthdev.todo.data.model.Category
 import com.anafthdev.todo.theme.ToDoTheme
+import com.anafthdev.todo.ui.category.CategoryScreen
+import com.anafthdev.todo.ui.category.CategoryViewModel
 import com.anafthdev.todo.ui.dashboard.DashboardScreen
 import com.anafthdev.todo.ui.dashboard.DashboardViewModel
+import com.anafthdev.todo.ui.new_edit_category.NewEditCategoryScreen
+import com.anafthdev.todo.ui.new_edit_category.NewEditCategoryViewModel
 import com.anafthdev.todo.ui.new_todo.NewTodoScreen
 import com.anafthdev.todo.ui.new_todo.NewTodoViewModel
 import com.google.accompanist.navigation.material.BottomSheetNavigator
@@ -98,7 +102,17 @@ fun TodoApp(
                         selectedRoute = backStackEntry?.destination?.route ?: "",
                         categories = viewModel.categories,
                         onDestinationClicked = { destination ->
-                            navController.navigate(destination.route)
+                            navController.navigate(
+                                route = destination.route,
+                            ) {
+                                popUpTo(TopLevelDestinations.Home.dashboard.route) {
+                                    saveState = true
+                                }
+
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+
                             scope.launch {
                                 drawerState.close()
                             }
@@ -130,11 +144,25 @@ fun TodoApp(
                             route = TopLevelDestinations.Home.ROUTE
                         ) {
                             composable(TopLevelDestinations.Home.dashboard.route) { backEntry ->
-                                val viewModel = hiltViewModel<DashboardViewModel>(backEntry)
+                                val mViewModel = hiltViewModel<DashboardViewModel>(backEntry)
 
                                 DashboardScreen(
                                     navController = navController,
-                                    viewModel = viewModel,
+                                    viewModel = mViewModel,
+                                    onNavigationIconClicked = {
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
+                                    }
+                                )
+                            }
+
+                            composable(TopLevelDestinations.Home.category.route) { backEntry ->
+                                val mViewModel = hiltViewModel<CategoryViewModel>(backEntry)
+
+                                CategoryScreen(
+                                    navController = navController,
+                                    viewModel = mViewModel,
                                     onNavigationIconClicked = {
                                         scope.launch {
                                             drawerState.open()
@@ -144,11 +172,23 @@ fun TodoApp(
                             }
 
                             bottomSheet(TopLevelDestinations.Home.newTodo.route) { backEntry ->
-                                val viewModel = hiltViewModel<NewTodoViewModel>()
+                                val mViewModel = hiltViewModel<NewTodoViewModel>()
 
                                 NewTodoScreen(
                                     navController = navController,
-                                    viewModel = viewModel
+                                    viewModel = mViewModel
+                                )
+                            }
+
+                            bottomSheet(
+                                route = TopLevelDestinations.Home.newEditCategory.route,
+                                arguments = TopLevelDestinations.Home.newEditCategory.arguments
+                            ) { backEntry ->
+                                val mViewModel = hiltViewModel<NewEditCategoryViewModel>(backEntry)
+
+                                NewEditCategoryScreen(
+                                    navController = navController,
+                                    viewModel = mViewModel
                                 )
                             }
                         }
