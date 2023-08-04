@@ -1,0 +1,136 @@
+package com.anafthdev.todo.ui.category_with_todo
+
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.anafthdev.todo.R
+import com.anafthdev.todo.data.TopLevelDestinations
+import com.anafthdev.todo.foundation.uicomponent.TodoWithCategoryItem
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun CategoryWithTodoScreen(
+    navController: NavController,
+    viewModel: CategoryWithTodoViewModel
+) {
+
+    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                scrollBehavior = topAppBarScrollBehavior,
+                title = {
+                    Text(viewModel.category.name)
+                },
+                navigationIcon = {
+                    IconButton(onClick = navController::popBackStack) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_left),
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(TopLevelDestinations.Home.newTodo.route)
+                },
+                modifier = Modifier
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = "New Todo"
+                )
+            }
+        },
+        modifier = Modifier
+            .systemBarsPadding()
+            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+    ) { scaffoldPadding ->
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize()
+                .padding(scaffoldPadding)
+        ) {
+            items(
+                items = viewModel.todoWithCategory,
+                key = { item -> item.todo.id }
+            ) { todoWithCategory ->
+                TodoWithCategoryItem(
+                    todoWithCategory = todoWithCategory,
+                    onCheckedChange = { checked ->
+                        viewModel.updateTodo(todoWithCategory.todo.copy(finished = checked))
+                    },
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.96f)
+                        .animateItemPlacement(tween(256))
+                )
+            }
+
+            if (viewModel.completedTodoWithCategory.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.completed),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth(0.96f)
+                            .animateItemPlacement(tween(256))
+                    )
+                }
+            }
+
+            items(
+                items = viewModel.completedTodoWithCategory,
+                key = { item -> item.todo.id }
+            ) { todoWithCategory ->
+                TodoWithCategoryItem(
+                    todoWithCategory = todoWithCategory,
+                    onCheckedChange = { checked ->
+                        viewModel.updateTodo(todoWithCategory.todo.copy(finished = checked))
+                    },
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.96f)
+                        .animateItemPlacement(tween(256))
+                )
+            }
+        }
+    }
+}

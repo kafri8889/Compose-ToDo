@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.anafthdev.todo.R
 
 object DestinationRoute {
+    const val CATEGORY_WITH_TODO = "category_with_todo"
     const val NEW_EDIT_CATEGORY = "new_edit_category"
     const val DASHBOARD = "dashboard"
     const val CATEGORY = "category"
@@ -71,6 +72,17 @@ object TopLevelDestinations {
             route = DestinationRoute.CATEGORY,
             name = R.string.category,
             icon = R.drawable.ic_categories
+        )
+
+        val categoryWithTodo = TopLevelDestination(
+            route = "${DestinationRoute.CATEGORY_WITH_TODO}?" +
+                    "${DestinationArgument.CATEGORY_ID}={${DestinationArgument.CATEGORY_ID}}",
+            arguments = listOf(
+                navArgument(DestinationArgument.CATEGORY_ID) {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
         )
 
         val newEditCategory = TopLevelDestination(

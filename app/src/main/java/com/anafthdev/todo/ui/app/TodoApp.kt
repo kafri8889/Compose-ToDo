@@ -1,5 +1,7 @@
 package com.anafthdev.todo.ui.app
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,6 +44,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.anafthdev.todo.data.DestinationArgument
 import com.anafthdev.todo.data.NavigationDrawerDestination
 import com.anafthdev.todo.data.TopLevelDestination
 import com.anafthdev.todo.data.TopLevelDestinations
@@ -50,6 +53,8 @@ import com.anafthdev.todo.foundation.uicomponent.CategoryItem
 import com.anafthdev.todo.theme.ToDoTheme
 import com.anafthdev.todo.ui.category.CategoryScreen
 import com.anafthdev.todo.ui.category.CategoryViewModel
+import com.anafthdev.todo.ui.category_with_todo.CategoryWithTodoScreen
+import com.anafthdev.todo.ui.category_with_todo.CategoryWithTodoViewModel
 import com.anafthdev.todo.ui.dashboard.DashboardScreen
 import com.anafthdev.todo.ui.dashboard.DashboardViewModel
 import com.anafthdev.todo.ui.new_edit_category.NewEditCategoryScreen
@@ -120,6 +125,13 @@ fun TodoApp(
                                 drawerState.close()
                             }
                         },
+                        onCategoryClicked = { category ->
+                            navController.navigate(
+                                TopLevelDestinations.Home.categoryWithTodo.createRoute(
+                                    DestinationArgument.CATEGORY_ID to category.id
+                                ).route
+                            )
+                        },
                         onDismissRequest = {
                             scope.launch {
                                 drawerState.close()
@@ -138,6 +150,12 @@ fun TodoApp(
                         topEndPercent = 8
                     )
                 ) {
+                    BackHandler(drawerState.isOpen) {
+                        scope.launch {
+                            drawerState.close()
+                        }
+                    }
+
                     NavHost(
                         navController = navController,
                         startDestination = TopLevelDestinations.Home.ROUTE,
@@ -174,8 +192,20 @@ fun TodoApp(
                                 )
                             }
 
+                            composable(
+                                route = TopLevelDestinations.Home.categoryWithTodo.route,
+                                arguments = TopLevelDestinations.Home.categoryWithTodo.arguments
+                            ) { backEntry ->
+                                val mViewModel = hiltViewModel<CategoryWithTodoViewModel>(backEntry)
+
+                                CategoryWithTodoScreen(
+                                    navController = navController,
+                                    viewModel = mViewModel
+                                )
+                            }
+
                             bottomSheet(TopLevelDestinations.Home.newTodo.route) { backEntry ->
-                                val mViewModel = hiltViewModel<NewTodoViewModel>()
+                                val mViewModel = hiltViewModel<NewTodoViewModel>(backEntry)
 
                                 NewTodoScreen(
                                     navController = navController,
@@ -208,6 +238,7 @@ private fun DrawerContent(
     selectedRoute: String,
     categories: List<Category>,
     onDestinationClicked: (TopLevelDestination) -> Unit,
+    onCategoryClicked: (Category) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     ModalDrawerSheet {
@@ -267,6 +298,7 @@ private fun DrawerContent(
                     category = category,
                     modifier = Modifier
                         .fillMaxWidth(0.96f)
+                        .clickable { onCategoryClicked(category) }
                 )
             }
         }

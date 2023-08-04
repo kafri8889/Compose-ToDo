@@ -159,7 +159,11 @@ fun CategoryScreen(
                                 indication = rememberRipple(),
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = {
-
+                                    navController.navigate(
+                                        TopLevelDestinations.Home.categoryWithTodo.createRoute(
+                                            DestinationArgument.CATEGORY_ID to category.id
+                                        ).route
+                                    )
                                 },
                                 onLongClick = {
                                     if (category.id != LocalCategoryDataProvider.notCategorized.id) {
